@@ -5,10 +5,12 @@ import tvRoute from "./routes/tv.route.js";
 import { ENV_VARS } from "./config/confVars.js";
 import movieRoute from "./routes/movie.route.js";
 import searchRoute from "./routes/search.route.js";
+import cors from "cors";
 import cookieParser from "cookie-parser";
 import protectRoute from "./middleware/protectRoute.js";
 
 const app = express();
+app.use(cors());
 app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
 app.use(express.json()); // helps us to parse request body...
