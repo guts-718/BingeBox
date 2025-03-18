@@ -12,7 +12,11 @@ export const searchPerson = async (req, res) => {
       console.log("NO result found");
       return res.status(404).send(null);
     }
-
+    await User.findByIdAndUpdate(req.user._id, {
+      $pull: {
+        searchHistory: { id: response.results[0].id },
+      },
+    });
     await User.findByIdAndUpdate(req.user._id, {
       $push: {
         searchHistory: {
@@ -46,7 +50,11 @@ export const searchMovie = async (req, res) => {
       console.log("NO result found");
       return res.status(404).send(null);
     }
-
+    await User.findByIdAndUpdate(req.user._id, {
+      $pull: {
+        searchHistory: { id: response.results[0].id },
+      },
+    });
     await User.findByIdAndUpdate(req.user._id, {
       $push: {
         searchHistory: {
@@ -80,7 +88,11 @@ export const searchTv = async (req, res) => {
       console.log("NO result found");
       return res.status(404).send(null);
     }
-
+    await User.findByIdAndUpdate(req.user._id, {
+      $pull: {
+        searchHistory: { id: response.results[0].id },
+      },
+    });
     await User.findByIdAndUpdate(req.user._id, {
       $push: {
         searchHistory: {
@@ -118,6 +130,7 @@ export const removeItemFromSearchHistory = async (req, res) => {
   // params gives type of string
   let { id } = req.params;
   id = parseInt(id);
+  console.log(typeof id);
   try {
     await User.findByIdAndUpdate(req.user._id, {
       $pull: {

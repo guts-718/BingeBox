@@ -31,19 +31,13 @@ export const getTvTrailers = async (req, res) => {
     const data = await fetchFromTmdb(
       `https://api.themoviedb.org/3/tv/${id}/videos?language=en-US`
     );
-
-    if (data?.results?.length === 0) {
-      console.log("NO result found");
+    res.status(200).json({ success: true, trailers: data?.results });
+  } catch (error) {
+    if (error.message.includes("404")) {
       return res.status(404).send(null);
     }
-    res.status(200).json({ success: true, trailers: data.results });
-  } catch (error) {
-    console.log("error in fetching movie trailers ", error);
-    res.status(500).json({
-      success: false,
-      message: "error fetching movie trailers",
-      error: error.message,
-    });
+
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
 
@@ -55,18 +49,17 @@ export const getTvDetails = async (req, res) => {
       `https://api.themoviedb.org/3/tv/${id}?language=en-US`
     );
 
-    if (data?.results?.length === 0) {
+    if (data?.results?.length === 0 || !data) {
       console.log("NO result found");
       return res.status(404).send(null);
     }
     res.status(200).json({ success: true, content: data });
   } catch (error) {
-    console.log("could not get movie details ", error);
-    res.status(500).json({
-      success: false,
-      message: "could not get movie details",
-      error: error.message,
-    });
+    if (error.message.includes("404")) {
+      return res.status(404).send(null);
+    }
+
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
 export const getSimilarTv = async (req, res) => {
