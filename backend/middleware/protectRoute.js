@@ -26,6 +26,7 @@ const protectRoute = async (req, res, next) => {
         .status(404)
         .json({ success: false, message: "user not found" });
     }
+    req.user = user;
     next();
   } catch (error) {
     console.log("internal server error inside the protectRoute");
